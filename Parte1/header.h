@@ -1,4 +1,5 @@
 #include<iostream>
+#include<vector>
 
 using namespace std;
 
@@ -252,21 +253,32 @@ void eliminarAccesorio(accesorio **p, accesorio *i) {
 struct soldados {
     string nombre;
     string especie;
-    int energia;
+    float energia;
     string ambiente;
     int salud = 100;
+    vector<string> mochila;
     int fidelidad;
     soldados *next;
 };
 
-soldados *nuevoSoldado(string nombre, string especie, int fidelidad) {
+soldados *nuevoSoldado(string nombre, string especie, float energia, string ambiente, int fidelidad) {
     soldados *nuevoSoldado = new soldados;
     nuevoSoldado->nombre = nombre;
     nuevoSoldado->especie = especie;
+    nuevoSoldado->energia = energia;
+    nuevoSoldado->ambiente = ambiente;
     nuevoSoldado->fidelidad = fidelidad;
+    nuevoSoldado->next = NULL;
     return nuevoSoldado;
 }
 
+void insertarSoldado(soldados** s, soldados* p) {
+    soldados* aux = *s;
+    while ((aux) && (aux->next)) {
+        aux = aux->next;
+    }
+    aux->next = p;
+}
 
 soldados *buscarSoldados(soldados *e, string nombre) {
     soldados *p = e;
@@ -274,7 +286,6 @@ soldados *buscarSoldados(soldados *e, string nombre) {
         p = p->next;
     }
     return p;
-
 }
 
 void modificarNombreSoldado(soldados *e, string nombre) {
@@ -287,23 +298,28 @@ void modificarFidelidadSoldado(soldados *e, int fidelidad) {
     e->fidelidad = fidelidad;
 }
 
-void mostrarSoldados(soldados *e) {
-    if (e) {
-        cout << e->nombre << "\n";
-        if (e->next) {
-            mostrarSoldados(e->next);
-        }
+void mostrarTodosSoldados(soldados* s) {
+    cout << "Nombre: " << s->nombre << endl;
+    cout << "Especie: " << s->especie << endl;
+    cout << "Energia: " << s->energia << endl;
+    cout << "Ambiente: " << s->ambiente << endl;
+    cout << "Salud: " << s->salud << endl;
+    cout << "Fidelidad: " << s->fidelidad << endl;
+    cout << endl;
+    if (s->next) {
+        mostrarTodosSoldados(s->next);
     }
-
 }
 
-int contarTotalSoldados(soldados *e) {
-    int c = 0;
-    while ((e)) {
-        c++;
-        e = e->next;
-    }
-    return c;
+void mostrarUnSoldado(soldados* s) {
+    cout << endl;
+    cout << "Nombre: " << s->nombre << endl;
+    cout << "Especie: " << s->especie << endl;
+    cout << "Energia: " << s->energia << endl;
+    cout << "Ambiente: " << s->ambiente << endl;
+    cout << "Salud: " << s->salud << endl;
+    cout << "Fidelidad: " << s->fidelidad << endl;
+    cout << endl;
 }
 
 void eliminarSoldado(soldados **p, soldados *i) {
@@ -325,10 +341,6 @@ void eliminarSoldado(soldados **p, soldados *i) {
             aux = e->next;
             e->next = e->next->next;
             delete aux;
-
         }
-
     }
-
-
 }
