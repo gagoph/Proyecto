@@ -43,6 +43,19 @@ int main() {
     insertarAccesorio(&acc1, acc5);
     insertarAccesorio(&acc1, acc6);
 
+    //SOLDADOS PRECARGADOS
+    soldados* sol1 = nuevoSoldado("Zephyr", "Zorblax", 7.5, "Gliphtor", 1);
+    soldados* sol2 = nuevoSoldado("Astrum", "Glimphtorians", 9.2, "Glimphor", 2);
+    soldados* sol3 = nuevoSoldado("Quixar", "Xyloquarks", 4.7, "Xylo-9", 2);
+    soldados* sol4 = nuevoSoldado("Ignis", "Plasmoides", 6.8, "Quasar", 1);
+    soldados* sol5 = nuevoSoldado("Nebulon", "Nebulites", 5.1, "Nubosis", 1);
+    soldados* sol6 = nuevoSoldado("Zyra", "Quantumites", 11.5, "Cronos-7", 2);
+    insertarSoldado(&sol1, sol2);
+    insertarSoldado(&sol1, sol3);
+    insertarSoldado(&sol1, sol4);
+    insertarSoldado(&sol1, sol5);
+    insertarSoldado(&sol1, sol6);
+
 
     int num, num1, num2, num3, num3_1, num4;
 
@@ -287,56 +300,85 @@ int main() {
             cin >> num3;
 
             switch(num3) {
-                case 1: 
-                    //Crea o agrega soldados
-                    cout << "CREAR SOLDADOS" << endl;
-                    break;
-                case 2: 
-                    //Modifica las soldados
-                    cout << "MODIFICAR SOLDADOS" << endl;
-                    break;
-                case 3: 
-                    //Elimina las soldados
-                    cout << "ELIMINAR SOLDADOS" << endl;
-                    break;
-                case 4: 
-                    //Muestra las soldados
-                    cout << "MOSTRAR SOLDADOS" << endl;
-                    break;
-                case 5: 
-                    cout << "1. Agregar 5 accesorios" << endl;
-                    cout << "2. Eliminar accesorios" << endl;
-                    cout << "3. Mostrar accesorios en la mochila" << endl;
-                    cout << "4. Regresar al menu principal" << endl;
-                    cout << " " << endl;
-                    cin >> num3_1;
+            case 1: {
+                //Crea o agrega soldados
+                string nombre;
+                string especie;
+                float energia;
+                string ambiente;
+                int fidelidad;
 
-                    switch(num3_1) {
 
-                        case 1: 
-                            //Agrega 5 accesorios
-                            cout << "AGREGAR 5 ACCESORIOS" << endl;
-                            break;
-                        case 2: 
-                            //Elimina accesorios
-                            cout << "ELIMINA ACCESORIOS" << endl;
-                            break;
-                        case 3: 
-                            //Muestra accesorios
-                            cout << "MOSTRAR ACCESORIOS" << endl;
-                            break;
-                        case 4: 
-                            //Devolver al menu principal
-                            cout << "DEVOLVER AL MENU PRINCIPAL" << endl;
-                            break;
-                    }
-                    break;
-                case 6: 
-                    //Devolver al menu principal
-                    cout << "DEVOLVER AL MENU PRINCIPAL" << endl;
-                    break;
+                cout << "Ingrese el nombre: ";
+                cin >> nombre;
+                cout << "Ingrese la fidelidad (1 Humanos, 2 Alienigenas): ";
+                cin >> fidelidad;
+                cout << "Ingrese una especie de las mostradas: " << endl;
+                cout << endl;
+                mostrarTodasEspecies(esp1);
+                cout << endl;
+                cout << "- ";
+                cin >> especie;
+                cout << endl;
+                if (buscarEspecie(esp1, especie)) {
+                    energia = buscarEspecie(esp1, especie)->energia;
+                    ambiente = buscarEspecie(esp1, especie)->ambiente;
+                    soldados* s = nuevoSoldado(nombre, especie, energia, ambiente, fidelidad);
+                    insertarSoldado(&sol1, s);
+                }
+                else {
+                    cout << "Ninguna especie coincide con la ingresada." << endl;
+                    cout << endl;
+                }
             }
             break;
+            case 2: 
+                //Modifica las soldados
+                cout << "MODIFICAR SOLDADOS" << endl;
+            break;
+            case 3: 
+                //Elimina las soldados
+                cout << "ELIMINAR SOLDADOS" << endl;
+            break;
+            case 4: {
+                //Muestra los soldados
+                mostrarTodosSoldados(sol1);
+            }
+            break;
+            case 5: 
+                cout << "1. Agregar 5 accesorios" << endl;
+                cout << "2. Eliminar accesorios" << endl;
+                cout << "3. Mostrar accesorios en la mochila" << endl;
+                cout << "4. Regresar al menu principal" << endl;
+                cout << " " << endl;
+                cin >> num3_1;
+
+                switch(num3_1) {
+
+                    case 1: 
+                        //Agrega 5 accesorios
+                        cout << "AGREGAR 5 ACCESORIOS" << endl;
+                    break;
+                    case 2: 
+                        //Elimina accesorios
+                        cout << "ELIMINA ACCESORIOS" << endl;
+                    break;
+                    case 3: 
+                        //Muestra accesorios
+                        cout << "MOSTRAR ACCESORIOS" << endl;
+                    break;
+                    case 4: 
+                        //Devolver al menu principal
+                        cout << "DEVOLVER AL MENU PRINCIPAL" << endl;
+                    break;
+                }
+                break;
+            case 6: 
+                //Devolver al menu principal
+                cout << "DEVOLVER AL MENU PRINCIPAL" << endl;
+                break;
+        }
+        break;
         case 4: 
             cout << "1. Crear/Agregar ambientes" << endl;
             cout << "2. Eliminar ambientes" << endl;
