@@ -368,27 +368,27 @@ void agregarAccesoriosMochila(soldados* s, accesorio* a, string nombre, string a
                             buscarSoldados(s, nombre)->mochila[4] = a5;
                         }
                         else {
-                            cout << "El accesorio ingresado no existe" << endl;
+                            cout << "Uno de los accesorios ingresados no existe." << endl;
                         }
                     }
                     else {
-                        cout << "El accesorio ingresado no existe" << endl;
+                        cout << "Uno de los accesorios ingresados no existe." << endl;
                     }
                 }
                 else {
-                    cout << "El accesorio ingresado no existe" << endl;
+                    cout << "Uno de los accesorios ingresados no existe." << endl;
                 }
             }
             else {
-                cout << "El accesorio ingresado no existe" << endl;
+                cout << "Uno de los accesorios ingresados no existe." << endl;
             }
         }
         else {
-            cout << "El accesorio ingresado no existe." << endl;
+            cout << "Uno de los accesorios ingresados no existe." << endl;
         }
     }
     else {
-        cout << "El soldado ingresado no existe." << endl;
+        cout << "Uno de los accesorios ingresados no existe." << endl;
     }
 }
 
