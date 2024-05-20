@@ -92,9 +92,9 @@ int main() {
 
                 cout << "Ingrese el nombre: ";
                 cin >> nombre;
-                cout << "Ingrese la energia: ";
+                cout << "Ingrese la energia (numero): ";
                 cin >> energia;
-                cout << "Ingrese un ambiente de los mostrados: " << endl;
+                cout << "Ingrese un nombre de los ambientes mostrados: " << endl;
                 cout << endl;
                 mostrarAmbientes(amb1);
                 cout << endl;
@@ -124,8 +124,9 @@ int main() {
                 if (buscarEspecie(esp1, nombre)) {
                     mostrarUnaEspecie(buscarEspecie(esp1, nombre));
 
-                    cout << "Indique el numero del campo que desea cambiar?: " << endl;
+                    cout << "Indique el numero del campo que desea cambiar?: ";
                     cin >> numx;
+                    cout << endl;
 
                     switch (numx) {
                     case 1:
@@ -133,6 +134,7 @@ int main() {
 
                         cout << "Indica el nuevo nombre: ";
                         cin >> nuevoNombre;
+                        cout << endl;
 
                         modificarNombreEspecies(buscarEspecie(esp1, nombre), nuevoNombre);
                         break;
@@ -141,6 +143,7 @@ int main() {
 
                         cout << "Indica la nueva cantidad de energia: ";
                         cin >> nuevaEnergia;
+                        cout << endl;
 
                         modificarEnergiaEspecies(buscarEspecie(esp1, nombre), nuevaEnergia);
                         break;
@@ -149,12 +152,14 @@ int main() {
 
                         cout << "Indica el nuevo ambiente: ";
                         cin >> nuevoAmbiente;
+                        cout << endl;
 
                         modificarAmbienteEspecies(buscarEspecie(esp1, nombre), nuevoAmbiente);
                         break;
                     }
                 }
                 else {
+                    cout << endl;
                     cout << "No existe una especie con ese nombre." << endl;
                     cout << endl;
                 }
@@ -199,14 +204,15 @@ int main() {
                 int valor;
                 int consumo;
 
+                cout << endl;
                 cout << "Ingrese el nombre: ";
                 cin.ignore();
                 getline(cin, nombre);
                 cout << "Ingrese el tipo: ";
                 cin >> tipo;
-                cout << "Ingrese el valor: ";
+                cout << "Ingrese el valor (numero): ";
                 cin >> valor;
-                cout << "Ingrese el consumo: ";
+                cout << "Ingrese el consumo (numero): ";
                 cin >> consumo;
                 cout << endl;
 
@@ -223,6 +229,7 @@ int main() {
                 int nuevoConsumo;
                 int numx = 0;
 
+                cout << endl;
                 cout << "Indique el nombre del accesorio que deseas modificar: ";
                 cin.ignore();
                 getline(cin, nombre);
@@ -230,8 +237,9 @@ int main() {
                 if (buscarAccesorio(acc1, nombre)) {
                     mostrarUnAccesorio(buscarAccesorio(acc1, nombre));
 
-                    cout << "Indique el numero del campo que desea cambiar?: " << endl;
+                    cout << "Indique el numero del campo que desea cambiar?: ";
                     cin >> numx;
+                    cout << endl;
 
                     switch (numx) {
                     case 1:
@@ -239,6 +247,7 @@ int main() {
                         cout << "Indica el nuevo nombre: ";
                         cin.ignore();
                         getline(cin, nuevoNombre);
+                        cout << endl;
 
                         modificarNombreAccesorio(buscarAccesorio(acc1, nombre), nuevoNombre);
                         break;
@@ -246,6 +255,7 @@ int main() {
                         //Modificar Tipo
                         cout << "Indica el nuevo tipo: ";
                         cin >> nuevoTipo;
+                        cout << endl;
 
                         modificarTipoAccesorio(buscarAccesorio(acc1, nombre), nuevoTipo);
                         break;
@@ -254,6 +264,7 @@ int main() {
 
                         cout << "Indica el nuevo valor: ";
                         cin >> nuevoValor;
+                        cout << endl;
 
                         modificarValorAccesorio(buscarAccesorio(acc1, nombre), nuevoValor);
                         break;
@@ -261,12 +272,14 @@ int main() {
                         //Modificar Consumo
                         cout << "Indica el nuevo consumo: ";
                         cin >> nuevoConsumo;
+                        cout << endl;
 
                         modificarConsumoAccesorio(buscarAccesorio(acc1, nombre), nuevoConsumo);
                         break;
                     }
                 }
                 else {
+                    cout << endl;
                     cout << "No existe un accesorio con ese nombre." << endl;
                     cout << endl;
                 }
@@ -275,12 +288,20 @@ int main() {
             case 3: {
                 //Elmina accesorios
                 string nombre;
+                cout << endl;
                 cout << "Indique el nombre del accesorio que quiere eliminar: ";
                 cin.ignore();
                 getline(cin, nombre);
 
-                eliminarAccesorio(&acc1, buscarAccesorio(acc1, nombre));
-                cout << endl;
+                if(buscarAccesorio(acc1, nombre)) {
+                    eliminarAccesorio(&acc1, buscarAccesorio(acc1, nombre));
+                    cout << endl;
+                }
+                else {
+                    cout << endl;
+                    cout << "El accesorio ingresado no existe." << endl;
+                    cout << endl;
+                }
             }
             break;
             case 4: {
@@ -313,6 +334,7 @@ int main() {
                 string ambiente;
                 int fidelidad;
 
+                cout << endl;
                 cout << "Ingrese el nombre: ";
                 cin >> nombre;
                 cout << "Ingrese la fidelidad (1 Humanos, 2 Alienigenas): ";
@@ -344,6 +366,7 @@ int main() {
                 int nuevaFidelidad;
                 int numx = 0;
 
+                cout << endl;
                 cout << "Indique el nombre del soldado que deseas modificar: ";
                 cin.ignore();
                 getline(cin, nombre);
@@ -351,8 +374,9 @@ int main() {
                 if (buscarSoldados(sol1, nombre)) {
                     mostrarUnSoldado(buscarSoldados(sol1, nombre));
 
-                    cout << "Indique el numero del campo que desea cambiar?: " << endl;
+                    cout << "Indique el numero del campo que desea cambiar?: ";
                     cin >> numx;
+                    cout << endl;
 
                     switch (numx) {
                     case 1:
@@ -360,6 +384,7 @@ int main() {
                         cout << "Indica el nuevo nombre: ";
                         cin.ignore();
                         getline(cin, nuevoNombre);
+                        cout << endl;
 
                         modificarNombreSoldado(buscarSoldados(sol1, nombre), nuevoNombre);
                     break;
@@ -367,6 +392,7 @@ int main() {
                         //Modificar Especie
                         cout << "Indica la nueva especie: ";
                         cin >> nuevaEspecie;
+                        cout << endl;
 
                         modificarEspecieSoldado(esp1, buscarSoldados(sol1, nombre), nuevaEspecie);
                     break;
@@ -374,6 +400,7 @@ int main() {
                         //Modificar Especie
                         cout << "Indica la nueva especie: ";
                         cin >> nuevaEspecie;
+                        cout << endl;
 
                         modificarEspecieSoldado(esp1, buscarSoldados(sol1, nombre), nuevaEspecie);
                     break;
@@ -381,6 +408,7 @@ int main() {
                         //Modificar Especie
                         cout << "Indica la nueva especie: ";
                         cin >> nuevaEspecie;
+                        cout << endl;
 
                         modificarEspecieSoldado(esp1, buscarSoldados(sol1, nombre), nuevaEspecie);
                     break;
@@ -389,6 +417,7 @@ int main() {
 
                         cout << "Indica el nuevo valor de fidelidad (1 Humanos, 2 Alienigenas): ";
                         cin >> nuevaFidelidad;
+                        cout << endl;
 
                         modificarFidelidadSoldado(buscarSoldados(sol1, nombre), nuevaFidelidad);
                     break;
@@ -413,10 +442,12 @@ int main() {
             break;
             case 4: {
                 //Muestra los soldados
+                cout << endl;
                 mostrarTodosSoldados(sol1);
             }
                   break;
             case 5:
+                cout << endl;
                 cout << "1. Agregar 5 accesorios a la mochila" << endl;
                 cout << "2. Eliminar accesorios de la mochila" << endl;
                 cout << "3. Regresar al menu principal" << endl;
@@ -433,6 +464,7 @@ int main() {
                     string a4;
                     string a5;
                     string nombre;
+                    cout << endl;
                     cout << "Indique el nombre del soldado: ";
                     cin >> nombre;
                     cout << endl;
@@ -441,16 +473,12 @@ int main() {
                     cin.ignore();
                     getline(cin, a1);
                     cout << "Escribe el nombre del segundo accesorio: ";
-                    //cin.ignore();
                     getline(cin, a2);
                     cout << "Escribe el nombre del tercer accesorio: ";
-                    //cin.ignore();
                     getline(cin, a3);
                     cout << "Escribe el nombre del cuarto accesorio: ";
-                    //cin.ignore();
                     getline(cin, a4);
                     cout << "Escribe el nombre del quinto accesorio: ";
-                    //cin.ignore();
                     getline(cin, a5);
                     cout << endl;
 
@@ -463,6 +491,7 @@ int main() {
                     string accesorioE;
                     string accesorioR;
 
+                    cout << endl;
                     cout << "Ingrese el nombre del soldado: ";
                     cin >> nombre;
                     cout << endl;
@@ -475,6 +504,7 @@ int main() {
                     getline(cin, accesorioE);
                     cout << endl;
                     cout << "Ingrese el nombre del accesorio con el que se va a reemplazar el eliminado: " << endl;
+                    cout << endl;
                     mostrarTodosAccesorios(acc1);
                     cout << "- ";
                     getline(cin, accesorioR);
@@ -483,14 +513,10 @@ int main() {
                 }
                 break;
                 case 3:
-                    //Muestra accesorios
-                    cout << "MOSTRAR ACCESORIOS" << endl;
+                    //Regresa al menu principal
+                    cout << endl;
                 break;
                 }
-            break;
-            case 6:
-                //Devolver al menu principal
-                cout << "DEVOLVER AL MENU PRINCIPAL" << endl;
             break;
             }
         break;
