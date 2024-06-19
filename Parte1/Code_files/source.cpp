@@ -1,6 +1,7 @@
 #include<iostream>
-#include<string>;
+#include<string>
 #include "headers.h"
+#include <fstream>
 using namespace std;
 
 int main() {
