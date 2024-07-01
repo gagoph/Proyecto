@@ -1,57 +1,140 @@
 #include<iostream>
 #include<string>
-#include "headers.h"
+#include "header.h"
 #include <fstream>
+#include <sstream>
+#include <vector>
 using namespace std;
 
 int main() {
 
-    //AMBIENTES PRECARGADOS
+    int cantidad;
+    string linea;
+    string x;
+
+    //LECTURA ARCHIVOS
+    //Cabeza ambientes
     ambientes* amb1 = nuevoAmbiente("Gliphtor");
-    ambientes* amb2 = nuevoAmbiente("Glimphor");
-    ambientes* amb3 = nuevoAmbiente("Xylo-9");
-    ambientes* amb4 = nuevoAmbiente("Quasar");
-    ambientes* amb5 = nuevoAmbiente("Nubosis");
-    ambientes* amb6 = nuevoAmbiente("Cronos-7");
-    insertarAmbiente(&amb1, amb2);
-    insertarAmbiente(&amb1, amb3);
-    insertarAmbiente(&amb1, amb4);
-    insertarAmbiente(&amb1, amb5);
-    insertarAmbiente(&amb1, amb6);
+    //Lectura del ambiente
+    ifstream archivoAmbientes("ambiente.inv");
+    if (!archivoAmbientes.is_open()) {
+        cout << "Error al abrir el archivo." << endl;
+        return 1;
+    }
+    archivoAmbientes >> cantidad;
+    archivoAmbientes.ignore();
+    while (getline(archivoAmbientes, linea)) {
+        ambientes* ambiente;
+        if (linea == "--");
+        else {
+            string nombre;
+            nombre = linea;
+            ambientes* nuevo = nuevoAmbiente(nombre);
+            insertarAmbiente(&amb1, nuevo);
+        }
+    }
+    archivoAmbientes.close();
 
-    //ESPECIES PRECARGADAS
-    especies* esp1 = nuevaEspecie("Zorblax", 7.5, "Gliphtor");
-    especies* esp2 = nuevaEspecie("Glimphtorians", 9.2, "Glimphor");
-    especies* esp3 = nuevaEspecie("Xyloquarks", 4.7, "Xylo-9");
-    especies* esp4 = nuevaEspecie("Plasmoides", 6.8, "Quasar");
-    especies* esp5 = nuevaEspecie("Nebulites", 5.1, "Nubosis");
-    especies* esp6 = nuevaEspecie("Quantumites", 11.5, "Cronos-7");
-    insertarEspecie(&esp1, esp2);
-    insertarEspecie(&esp1, esp3);
-    insertarEspecie(&esp1, esp4);
-    insertarEspecie(&esp1, esp5);
-    insertarEspecie(&esp1, esp6);
+    //Cabeza especies
+    especies* esp1 = nuevaEspecie("Zorblax", 7.5, buscarAmbiente(amb1, "Gliphtor"));
+    //Lectura de las especies
+    ifstream archivoEspecies("especies.inv");
+    if (!archivoEspecies.is_open()) {
+        cout << "Error al abrir el archivo." << endl;
+        return 1;
+    }
+    archivoEspecies >> cantidad;
+    archivoEspecies.ignore();
+    for (int i = 0; i < cantidad; i++) {
+        especies* especie;
+        int nuevaEnergia = 0;
+        getline(archivoEspecies, linea);
+        x = linea;
+        getline(archivoEspecies, linea); 
+        string nuevoNombre = linea;
 
-    //ACCESORIOS PRECARGADOS
-    accesorio* acc1 = nuevoAccesorio("Espada de las Estrellas", "Ataque", 50, 5);
-    accesorio* acc2 = nuevoAccesorio("Amuleto de la Resiliencia", "Defensa", 30, 5);
-    accesorio* acc3 = nuevoAccesorio("Botas del Caminante", "Supervivencia", 20, 8);
-    accesorio* acc4 = nuevoAccesorio("Anillo de la Vitalidad", "Acondicionamiento", 0, 0);
-    accesorio* acc5 = nuevoAccesorio("Capa de las Sombras", "Defensa", 25, 6);
-    accesorio* acc6 = nuevoAccesorio("Gafas de Clarividencia", "Supervivencia", 15, 5);
-    insertarAccesorio(&acc1, acc2);
-    insertarAccesorio(&acc1, acc3);
-    insertarAccesorio(&acc1, acc4);
-    insertarAccesorio(&acc1, acc5);
-    insertarAccesorio(&acc1, acc6);
+        getline(archivoEspecies, linea); 
+        size_t found = linea.find(":");
+        if (found!= string::npos) {
+            string energiaStr = linea.substr(found + 1);
+            nuevaEnergia = stoi(energiaStr);
+        }
+        getline(archivoEspecies, linea); 
+        found = linea.find(":");
+        if (found!= string::npos) {
+            string saludStr = linea.substr(found + 1);
+            int nuevaSalud = stoi(saludStr);
+        }
+        getline(archivoEspecies, linea); 
+        string nuevoNombreAmbiente = linea;
+        ambientes* nuevoAmbiente = buscarAmbiente(amb1, nuevoNombreAmbiente);
+        especies* nuevaEsp = nuevaEspecie(nuevoNombre, nuevaEnergia, nuevoAmbiente);
+        insertarEspecie(&esp1, nuevaEsp);
+    }
+    archivoEspecies.close();
 
-    //SOLDADOS PRECARGADOS
-    soldados* sol1 = nuevoSoldado("Zephyr", "Zorblax", 7.5, "Gliphtor", 1);
-    soldados* sol2 = nuevoSoldado("Astrum", "Glimphtorians", 9.2, "Glimphor", 2);
-    soldados* sol3 = nuevoSoldado("Quixar", "Xyloquarks", 4.7, "Xylo-9", 2);
-    soldados* sol4 = nuevoSoldado("Ignis", "Plasmoides", 6.8, "Quasar", 1);
-    soldados* sol5 = nuevoSoldado("Nebulon", "Nebulites", 5.1, "Nubosis", 1);
-    soldados* sol6 = nuevoSoldado("Zyra", "Quantumites", 11.5, "Cronos-7", 2);
+    //Cabeza accesorios
+    accesorio* acc1 = nuevoAccesorio("Espada de las Estrellas", "Ataque", 50, "", 10, 0);
+    ifstream archivoAccesorios("accesorios.inv");
+    if (!archivoAccesorios.is_open()) {
+        cout << "Error al abrir el archivo." << endl;
+        return 1;
+    }
+    archivoAccesorios >> cantidad;
+    archivoAccesorios.ignore();
+    for(int i = 0; i < cantidad; i++) {
+        accesorio* acc;
+        string nuevoTipo;
+        int nuevoValor;
+        string nuevaRecuperacion;
+        int nuevaEnergia;
+        int nuevoContenedor;
+        getline(archivoAccesorios, linea);
+        x = linea;
+        getline(archivoAccesorios, linea);
+        string nuevoNombre = linea;
+        getline(archivoAccesorios, linea);
+        size_t found = linea.find(":");
+        if (found!= string::npos) {
+            string tipoStr = linea.substr(found + 1);
+            nuevoTipo = tipoStr;
+        }
+        getline(archivoAccesorios, linea); 
+        size_t found2 = linea.find(":");
+        if (found2!= string::npos) {
+            string valorStr = linea.substr(found2 + 1);
+            nuevoValor = stoi(valorStr);
+        }
+        getline(archivoAccesorios, linea);
+        size_t found3 = linea.find(":");
+        if (found3!= string::npos) {
+            string recuperacionStr = linea.substr(found3 + 1);
+            nuevaRecuperacion = recuperacionStr;
+        }
+        getline(archivoAccesorios, linea); 
+        size_t found5 = linea.find(":");
+        if (found5!= string::npos) {
+            string energiaStr = linea.substr(found5 + 1);
+            nuevaEnergia = stoi(energiaStr);
+        }
+        getline(archivoAccesorios, linea); 
+        size_t found4 = linea.find(":");
+        if (found4!= string::npos) {
+            string contenedorStr = linea.substr(found4 + 1);
+            nuevoContenedor = stoi(contenedorStr);
+        }
+        accesorio* nuevoAcc = nuevoAccesorio(nuevoNombre, nuevoTipo, nuevoValor, nuevaRecuperacion, nuevaEnergia, nuevoContenedor);
+        insertarAccesorio(&acc1, nuevoAcc);
+    }
+    archivoAccesorios.close();
+
+    //Soldados Pre-cargados
+    soldados* sol1 = nuevoSoldado("Zephyr", buscarEspecie(esp1, "Reptilianos"));
+    soldados* sol2 = nuevoSoldado("Astrum", buscarEspecie(esp1, "Pleyadianos"));
+    soldados* sol3 = nuevoSoldado("Quixar", buscarEspecie(esp1, "Andromedanos"));
+    soldados* sol4 = nuevoSoldado("Ignis", buscarEspecie(esp1, "Ashtar"));
+    soldados* sol5 = nuevoSoldado("Nebulon", buscarEspecie(esp1, "Marcianos"));
+    soldados* sol6 = nuevoSoldado("Zyra", buscarEspecie(esp1, "Humanos"));
     insertarSoldado(&sol1, sol2);
     insertarSoldado(&sol1, sol3);
     insertarSoldado(&sol1, sol4);
@@ -61,25 +144,48 @@ int main() {
 
     int num, num1, num2, num3, num3_1, num4;
 
+    soldados* soldado_11 = nullptr;
+    soldados* soldado_21 = nullptr;
+    soldados* soldado_12 = nullptr;
+    soldados* soldado_22 = nullptr;
+    soldados* soldado_13 = nullptr;
+    soldados* soldado_23 = nullptr;
+
+    bool elegirSoldadosBatallaBool = false;
+    bool ganador = false;
+
     do {
-        cout << "1. Gestionar especies" << endl;
-        cout << "2. Gestionar accesorios" << endl;
-        cout << "3. Gestionar soldados" << endl;
-        cout << "4. Gestionar ambientes" << endl;
-        cout << "5. Batalla" << endl;
-        cout << "6. Score" << endl;
-        cout << "7. Terminar programa" << endl;
+        cout << " ____  _  _  _  _  __    ___  ____  _____  _  _    ____  _  _  ____  ____    __   ____  ____  ____  ____  ____  ___  ____  ____  ____ \n";
+        cout << "(_  _)( \\( )( \\/ )/__\\  / __)(_  _)(  _  )( \\( )  ( ___)( \\/ )(_  _)(  _ \\  /__\\ (_  _)( ___)(  _ \\(  _ \\( ___)/ __)(_  _)(  _ \\( ___)\n";
+        cout << " _)(_  )  (  \\  //(__)\\ \\__ \\ _)(_  )(_)(  )  (    )__)  )  (   )(   )   / /(__)\\  )(   )__)  )   / )   / )__) \\__ \\  )(   )   / )__) \n";
+        cout << "(____)(_)\\_)  \\/(__)(__)(___/(____)(_____)(_)\\_)  (____)(_\\/_\\_) (__) (_\\_)(__)(__)(__) (____)(_\\/_\\_)(_\\_)(____)(___/ (__) (_\\_)(____)\n";
+        cout << "" << endl;
+        cout << "                                                           _..._\n";
+        cout << "                                                         .'     '.\n";
+        cout << "                                                        / \\     / \\\n";
+        cout << "                                                       (  |     |  )\n";
+        cout << "                                                       (`\"`  \"  `\"`)\n";
+        cout << "                                                        \\         /\n";
+        cout << "                                                         \\  ___  /\n";
+        cout << "                                                          '.___.'\n";
+        cout << endl;
+        cout << "                                                   1. Gestionar especies" << endl;
+        cout << "                                                   2. Gestionar accesorios" << endl;
+        cout << "                                                   3. Gestionar soldados" << endl;
+        cout << "                                                   4. Gestionar ambientes" << endl;
+        cout << "                                                   5. Batalla" << endl;
+        cout << "                                                   6. Terminar programa" << endl;
         cout << " " << endl;
         cin >> num;
         cout << endl;
 
         switch (num) {
         case 1:
-            cout << "1. Crear/Agregar especies" << endl;
-            cout << "2. Modificar especies" << endl;
-            cout << "3. Eliminar especies" << endl;
-            cout << "4. Mostrar especies" << endl;
-            cout << "5. Regresar al menu principal" << endl;
+            cout << "                                                   1. Crear/Agregar especies" << endl;
+            cout << "                                                   2. Modificar especies" << endl;
+            cout << "                                                   3. Eliminar especies" << endl;
+            cout << "                                                   4. Mostrar especies" << endl;
+            cout << "                                                   5. Regresar al menu principal" << endl;
             cout << " " << endl;
             cin >> num1;
             cout << endl;
@@ -103,7 +209,7 @@ int main() {
                 cin >> ambiente;
                 cout << endl;
                 if (buscarAmbiente(amb1, ambiente)) {
-                    especies* e = nuevaEspecie(nombre, energia, ambiente);
+                    especies* e = nuevaEspecie(nombre, energia, buscarAmbiente(amb1, ambiente));
                     insertarEspecie(&esp1, e);
                 }
                 else {
@@ -111,7 +217,7 @@ int main() {
                     cout << endl;
                 }
             }
-                  break;
+                break;
             case 2: {
                 //Modifica las especies
                 string nombre;
@@ -155,7 +261,13 @@ int main() {
                         cin >> nuevoAmbiente;
                         cout << endl;
 
-                        modificarAmbienteEspecies(buscarEspecie(esp1, nombre), nuevoAmbiente);
+                        if (buscarAmbiente(amb1, nuevoAmbiente)) {
+                            modificarAmbienteEspecies(buscarEspecie(esp1, nombre), buscarAmbiente(amb1, nuevoAmbiente));
+                        }
+                        else {
+                            cout << "El ambiente ingresado no existe" << endl;
+                            cout << endl;
+                        }
                         break;
                     }
                 }
@@ -165,7 +277,7 @@ int main() {
                     cout << endl;
                 }
             }
-                  break;
+                break;
             case 3: {
                 //Eliminar especies
                 string nombre;
@@ -176,12 +288,12 @@ int main() {
 
                 cout << endl;
             }
-                  break;
+                break;
             case 4: {
                 //Mostrar especies
                 mostrarTodasEspecies(esp1);
             }
-                  break;
+                break;
             case 5:
                 //Devolver al menu principal
                 cout << endl;
@@ -189,11 +301,11 @@ int main() {
             }
             break;
         case 2:
-            cout << "1. Crear/Agregar accesorios" << endl;
-            cout << "2. Modificar accesorios" << endl;
-            cout << "3. Eliminar eccesorios" << endl;
-            cout << "4. Mostrar accesorios" << endl;
-            cout << "5. Regresar al menu principal" << endl;
+            cout << "                                                   1. Crear/Agregar accesorios" << endl;
+            cout << "                                                   2. Modificar accesorios" << endl;
+            cout << "                                                   3. Eliminar eccesorios" << endl;
+            cout << "                                                   4. Mostrar accesorios" << endl;
+            cout << "                                                   5. Regresar al menu principal" << endl;
             cout << " " << endl;
             cin >> num2;
 
@@ -204,6 +316,8 @@ int main() {
                 string tipo;
                 int valor;
                 int consumo;
+                string recuperacion;
+                int contenedor;
 
                 cout << endl;
                 cout << "Ingrese el nombre: ";
@@ -213,14 +327,18 @@ int main() {
                 cin >> tipo;
                 cout << "Ingrese el valor (numero): ";
                 cin >> valor;
+                cout << "Ingrese la recuperacion si la hay: ";
+                cin >> recuperacion;
                 cout << "Ingrese el consumo (numero): ";
                 cin >> consumo;
+                cout << "Ingrese el valor del contenedor si lo hay: ";
+                cin >> contenedor;
                 cout << endl;
 
-                accesorio* a = nuevoAccesorio(nombre, tipo, valor, consumo);
+                accesorio* a = nuevoAccesorio(nombre, tipo, valor, recuperacion, consumo, contenedor);
                 insertarAccesorio(&acc1, a);
             }
-                  break;
+                break;
             case 2: {
                 //Modifica accesorios
                 string nombre;
@@ -285,7 +403,7 @@ int main() {
                     cout << endl;
                 }
             }
-                  break;
+                break;
             case 3: {
                 //Elmina accesorios
                 string nombre;
@@ -317,12 +435,11 @@ int main() {
             }
             break;
         case 3:
-            cout << "1. Crear/Agregar soldados" << endl;
-            cout << "2. Modificar soldados" << endl;
-            cout << "3. Eliminar soldados" << endl;
-            cout << "4. Mostrar soldados" << endl;
-            cout << "5. Gestionar mochila" << endl;
-            cout << "6. Regresar al menu principal" << endl;
+            cout << "                                                   1. Crear/Agregar soldados" << endl;
+            cout << "                                                   2. Modificar soldados" << endl;
+            cout << "                                                   3. Eliminar soldados" << endl;
+            cout << "                                                   4. Mostrar soldados" << endl;
+            cout << "                                                   5. Regresar al menu principal" << endl;
             cout << " " << endl;
             cin >> num3;
 
@@ -331,15 +448,11 @@ int main() {
                 //Crea o agrega soldados
                 string nombre;
                 string especie;
-                float energia;
-                string ambiente;
                 int fidelidad;
 
                 cout << endl;
                 cout << "Ingrese el nombre: ";
                 cin >> nombre;
-                cout << "Ingrese la fidelidad (1 Humanos, 2 Alienigenas): ";
-                cin >> fidelidad;
                 cout << "Ingrese una especie de las mostradas: " << endl;
                 cout << endl;
                 mostrarTodasEspecies(esp1);
@@ -348,9 +461,7 @@ int main() {
                 cin >> especie;
                 cout << endl;
                 if (buscarEspecie(esp1, especie)) {
-                    energia = buscarEspecie(esp1, especie)->energia;
-                    ambiente = buscarEspecie(esp1, especie)->ambiente;
-                    soldados* s = nuevoSoldado(nombre, especie, energia, ambiente, fidelidad);
+                    soldados* s = nuevoSoldado(nombre, buscarEspecie(esp1, especie));
                     insertarSoldado(&sol1, s);
                 }
                 else {
@@ -446,86 +557,19 @@ int main() {
                 cout << endl;
                 mostrarTodosSoldados(sol1);
             }
-                  break;
+                break;
             case 5:
+                //Regresa al menu principal
                 cout << endl;
-                cout << "1. Agregar 5 accesorios a la mochila" << endl;
-                cout << "2. Eliminar accesorios de la mochila" << endl;
-                cout << "3. Regresar al menu principal" << endl;
-                cout << " " << endl;
-                cin >> num3_1;
-
-                switch (num3_1) {
-
-                case 1: {
-                    //Agrega 5 accesorios a la mochila
-                    string a1;
-                    string a2;
-                    string a3;
-                    string a4;
-                    string a5;
-                    string nombre;
-                    cout << endl;
-                    cout << "Indique el nombre del soldado: ";
-                    cin >> nombre;
-                    cout << endl;
-                    mostrarTodosAccesorios(acc1);
-                    cout << "Escribe el nombre del primer accesorio: ";
-                    cin.ignore();
-                    getline(cin, a1);
-                    cout << "Escribe el nombre del segundo accesorio: ";
-                    getline(cin, a2);
-                    cout << "Escribe el nombre del tercer accesorio: ";
-                    getline(cin, a3);
-                    cout << "Escribe el nombre del cuarto accesorio: ";
-                    getline(cin, a4);
-                    cout << "Escribe el nombre del quinto accesorio: ";
-                    getline(cin, a5);
-                    cout << endl;
-
-                    agregarAccesoriosMochila(sol1, acc1, nombre, a1, a2, a3, a4, a5);
-                }
-                break;
-                case 2: {
-                    //Elimina accesorios mochila
-                    string nombre;
-                    string accesorioE;
-                    string accesorioR;
-
-                    cout << endl;
-                    cout << "Ingrese el nombre del soldado: ";
-                    cin >> nombre;
-                    cout << endl;
-                    cout << "Ingrese el nombre del accesorio que desea eliminar: " << endl;
-                    cout << endl;
-                    mostrarMochila(buscarSoldados(sol1, nombre));
-                    cout << endl;
-                    cout << "- ";
-                    cin.ignore();
-                    getline(cin, accesorioE);
-                    cout << endl;
-                    cout << "Ingrese el nombre del accesorio con el que se va a reemplazar el eliminado: " << endl;
-                    cout << endl;
-                    mostrarTodosAccesorios(acc1);
-                    cout << "- ";
-                    getline(cin, accesorioR);
-
-                    eliminarAccesorioMochila(sol1, acc1, nombre, accesorioE, accesorioR);
-                }
-                break;
-                case 3:
-                    //Regresa al menu principal
-                    cout << endl;
-                break;
-                }
             break;
             }
         break;
         case 4:
-            cout << "1. Crear/Agregar ambientes" << endl;
-            cout << "2. Eliminar ambientes" << endl;
-            cout << "3. Mostrar ambientes" << endl;
-            cout << "4. Regresar al menu principal" << endl;
+            cout << "                                                   1. Crear/Agregar ambientes" << endl;
+            cout << "                                                   2. Eliminar ambientes" << endl;
+            cout << "                                                   3. Mostrar ambientes" << endl;
+            cout << "                                                   4. Modifica los ambientes" << endl;
+            cout << "                                                   5. Regresar al menu principal" << endl;
             cout << " " << endl;
             cin >> num4;
             cout << endl;
@@ -564,21 +608,49 @@ int main() {
                 mostrarAmbientes(amb1);
             }
             break;
-            case 4:
+            case 4: {
+                //Modifica los ambientes
+                string nombre;
+                string nuevoNombre;
+
+                cout << "Indica el nombre de la especie que deseas modificar: ";
+                cin >> nombre;
+                cout << endl;
+                if (buscarAmbiente(amb1, nombre)) {
+                    cout << "Indica el nuevo nombre: ";
+                    cin >> nuevoNombre;
+                    cout << endl;
+                    modificarAmbiente(buscarAmbiente(amb1, nombre), nuevoNombre);
+                }
+                else {
+                    cout << "No existe un ambiente con ese nombre" << endl;
+                    cout << endl;
+                }
+            }
+            break;
+            case 5:
                 //Devolver al menu principal
                 cout << endl;
             break;
             }
         break;
-        case 5:
-            //Batalla
-            cout << "BATALLA" << endl;
-        break;
-        case 6:
-            //Score
-            cout << "MOSTRAR SCORE";
+        case 5: {
+            elegirSoldadosBatalla(&elegirSoldadosBatallaBool, sol1, acc1, soldado_11, soldado_21, soldado_12, soldado_22, soldado_13, soldado_23);
+            if (elegirSoldadosBatallaBool) {
+                asignarFidelidad(soldado_11, soldado_21, soldado_12, soldado_22, soldado_13, soldado_23);
+                ambientes* ambienteR = ambienteRandom(amb1);
+                cout << endl;
+                cout << "El ambiente donde ocurrira la batalla es : " << ambienteR->nombre << endl;
+                cout << endl;
+                batalla(acc1, sol1, amb1, &ganador, soldado_11, soldado_21, soldado_12, soldado_22, soldado_13, soldado_23);
+            }
+            else {
+                cout << endl;
+            }
+        }
         break;
         }
 
-    } while (num != 7);
+    } while (num != 6);
+
 }
